@@ -7,6 +7,14 @@
   backdrop-filter: saturate(1.4) blur(14px);
   border-bottom: 1px solid var(--border);
 }
+/* Thin Karnataka flag stripe along the top: yellow over red. */
+.site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(to bottom, var(--flag-yellow) 50%, var(--flag-red) 50%);
+}
 .site-header__inner {
   display: flex;
   align-items: center;

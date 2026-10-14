@@ -350,7 +350,7 @@
   cursor: pointer;
 }
 .box[data-level='medium'] { border-color: var(--amber); background: color-mix(in srgb, var(--amber) 12%, transparent); }
-.box[data-level='low'], .box--review { border-color: var(--red); background: color-mix(in srgb, var(--red) 14%, transparent); }
+.box[data-level='low'], .box--review { border-style: dashed; border-color: var(--red); background: color-mix(in srgb, var(--red) 14%, transparent); }
 .box.is-selected { box-shadow: 0 0 0 3px var(--focus); z-index: 2; }
 .box__badge {
   position: absolute;
@@ -367,7 +367,7 @@
 }
 .legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 0.8rem; color: var(--muted); }
 .legend__swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 4px; background: var(--green); vertical-align: -1px; }
-.legend__swatch--review { background: var(--red); }
+.legend__swatch--review { background: transparent; border: 2px dashed var(--red); }
 
 .page-thumbs { display: flex; gap: 8px; overflow-x: auto; padding: 10px 16px; }
 .page-thumb {

@@ -1,15 +1,15 @@
 /*
  * Design tokens. Every colour in the app comes from here, so light and dark mode stay consistent.
- * Palette: warm stone neutrals, orange brand, red accent.
+ * Palette: Karnataka flag: red brand, gold (yellow) accent, warm stone neutrals.
  */
 :root {
   /* Brand: indigo with a sky-blue accent */
-  --brand: #cc4a0f;
-  --brand-strong: #a83c0b;
-  --brand-soft: #fff8f2;
-  --brand-soft-fg: #9a3412;
+  --brand: #b91c1c;
+  --brand-strong: #991b1b;
+  --brand-soft: #fef2f2;
+  --brand-soft-fg: #991b1b;
   --on-brand: #ffffff;
-  --accent: #dc2626;
+  --accent: #ca8a04;
 
   /* Neutrals (slate) */
   --bg: #fafaf9;
@@ -21,12 +21,12 @@
   --border-strong: #d6d3d1;
   --primary: var(--brand);
   --primary-text: var(--on-brand);
-  --focus: #cc4a0f;
+  --focus: #b91c1c;
   --danger: #dc2626;
 
   /* Status */
   --green: #059669;
-  --amber: #ca8a04; /* yellow, distinct from the orange brand */
+  --amber: #ea580c; /* orange: distinct from the red brand and the gold accent */
   --red: #dc2626;
   --ok-bg: #ecfdf5;
   --ok-fg: #047857;
@@ -39,9 +39,9 @@
 
   /* Surfaces that used to be hard-coded */
   --hero-from: #ffffff;
-  --hero-to: #fffaf6;
-  --hero-glow: rgba(234, 88, 12, 0.08);
-  --hero-glow-2: rgba(220, 38, 38, 0.05);
+  --hero-to: #fffaf5;
+  --hero-glow: rgba(185, 28, 28, 0.12);
+  --hero-glow-2: rgba(202, 138, 4, 0.07);
   --hero-dot: rgba(28, 25, 23, 0.06);
   --glass-bg: rgba(255, 255, 255, 0.7);
   --glass-border: #e7e5e4;
@@ -50,14 +50,17 @@
   --overlay: rgba(28, 25, 23, 0.45);
   --inverse-bg: #1c1917;
   --inverse-text: #fafaf9;
-  --paper-chip-bg: #fff7ed;
-  --paper-chip-fg: #9a3412;
+  /* Karnataka flag: yellow over red */
+  --flag-yellow: #facc15;
+  --flag-red: #dc2626;
+  --paper-chip-bg: #fef2f2;
+  --paper-chip-fg: #991b1b;
 
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.06);
   --shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
   --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.12);
-  --feature-bg: linear-gradient(140deg, #fff7ed, #fef2f2);
-  --feature-border: #fde3cf;
+  --feature-bg: linear-gradient(140deg, #fef2f2, rgba(202, 138, 4, 0.08));
+  --feature-border: rgba(185, 28, 28, 0.22);
   color-scheme: light;
 
   --radius-sm: 10px;
@@ -73,12 +76,12 @@
 }
 
 :root[data-theme='dark'] {
-  --brand: #fb923c;
-  --brand-strong: #fdba74;
-  --brand-soft: rgba(251, 146, 60, 0.14);
-  --brand-soft-fg: #fdba74;
-  --on-brand: #1c0d02;
-  --accent: #f87171;
+  --brand: #f87171;
+  --brand-strong: #fca5a5;
+  --brand-soft: rgba(248, 113, 113, 0.14);
+  --brand-soft-fg: #fecaca;
+  --on-brand: #1f0a0a;
+  --accent: #facc15;
 
   --bg: #1c1917;
   --surface: #262321;
@@ -87,11 +90,11 @@
   --muted: #b5aea8;
   --border: #3a3430;
   --border-strong: #4a433e;
-  --focus: #fdba74;
+  --focus: #fca5a5;
   --danger: #ef4444;
 
   --green: #10b981;
-  --amber: #facc15;
+  --amber: #fb923c;
   --red: #f43f5e;
   --ok-bg: rgba(16, 185, 129, 0.14);
   --ok-fg: #6ee7b7;
@@ -103,9 +106,9 @@
   --info-fg: #93c5fd;
 
   --hero-from: #1c1917;
-  --hero-to: #26201c;
-  --hero-glow: rgba(251, 146, 60, 0.14);
-  --hero-glow-2: rgba(248, 113, 113, 0.08);
+  --hero-to: #2a1f1c;
+  --hero-glow: rgba(248, 113, 113, 0.16);
+  --hero-glow-2: rgba(250, 204, 21, 0.08);
   --hero-dot: rgba(255, 255, 255, 0.05);
   --glass-bg: rgba(255, 255, 255, 0.06);
   --glass-border: rgba(255, 255, 255, 0.12);
@@ -118,20 +121,22 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.5);
-  --feature-bg: linear-gradient(140deg, rgba(251, 146, 60, 0.16), rgba(248, 113, 113, 0.08));
-  --feature-border: rgba(251, 146, 60, 0.28);
+  --feature-bg: linear-gradient(140deg, rgba(248, 113, 113, 0.16), rgba(250, 204, 21, 0.08));
+  --feature-border: rgba(248, 113, 113, 0.28);
+  --paper-chip-bg: #fef2f2;
+  --paper-chip-fg: #991b1b;
   color-scheme: dark;
 }
 
 /* Before the app sets data-theme (first paint), follow the OS setting. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
-  --brand: #fb923c;
-  --brand-strong: #fdba74;
-  --brand-soft: rgba(251, 146, 60, 0.14);
-  --brand-soft-fg: #fdba74;
-  --on-brand: #1c0d02;
-  --accent: #f87171;
+  --brand: #f87171;
+  --brand-strong: #fca5a5;
+  --brand-soft: rgba(248, 113, 113, 0.14);
+  --brand-soft-fg: #fecaca;
+  --on-brand: #1f0a0a;
+  --accent: #facc15;
 
   --bg: #1c1917;
   --surface: #262321;
@@ -140,11 +145,11 @@
   --muted: #b5aea8;
   --border: #3a3430;
   --border-strong: #4a433e;
-  --focus: #fdba74;
+  --focus: #fca5a5;
   --danger: #ef4444;
 
   --green: #10b981;
-  --amber: #facc15;
+  --amber: #fb923c;
   --red: #f43f5e;
   --ok-bg: rgba(16, 185, 129, 0.14);
   --ok-fg: #6ee7b7;
@@ -156,9 +161,9 @@
   --info-fg: #93c5fd;
 
   --hero-from: #1c1917;
-  --hero-to: #26201c;
-  --hero-glow: rgba(251, 146, 60, 0.14);
-  --hero-glow-2: rgba(248, 113, 113, 0.08);
+  --hero-to: #2a1f1c;
+  --hero-glow: rgba(248, 113, 113, 0.16);
+  --hero-glow-2: rgba(250, 204, 21, 0.08);
   --hero-dot: rgba(255, 255, 255, 0.05);
   --glass-bg: rgba(255, 255, 255, 0.06);
   --glass-border: rgba(255, 255, 255, 0.12);
@@ -171,8 +176,10 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.5);
-  --feature-bg: linear-gradient(140deg, rgba(251, 146, 60, 0.16), rgba(248, 113, 113, 0.08));
-  --feature-border: rgba(251, 146, 60, 0.28);
+  --feature-bg: linear-gradient(140deg, rgba(248, 113, 113, 0.16), rgba(250, 204, 21, 0.08));
+  --feature-border: rgba(248, 113, 113, 0.28);
+  --paper-chip-bg: #fef2f2;
+  --paper-chip-fg: #991b1b;
   color-scheme: dark;
   }
 }
