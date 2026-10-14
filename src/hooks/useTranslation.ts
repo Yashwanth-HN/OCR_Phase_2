@@ -7,6 +7,8 @@ export type TranslationState =
   | { status: 'done'; text: string }
   | { status: 'error' };
 
+const DEBOUNCE_MS = 600;
+
 /** Shows/hides an English translation of `text`, refetching whenever the text changes. */
 export function useTranslation(text: string) {
   const [visible, setVisible] = useState(false);
@@ -19,13 +21,19 @@ export function useTranslation(text: string) {
     }
     const controller = new AbortController();
     setState({ status: 'loading' });
-    api
-      .translate(text, controller.signal)
-      .then((translated) => setState({ status: 'done', text: translated }))
-      .catch((error: unknown) => {
-        if (!isAbortError(error)) setState({ status: 'error' });
-      });
-    return () => controller.abort();
+    // Wait until the user stops editing: the translation service is online and rate-limited.
+    const timer = window.setTimeout(() => {
+      api
+        .translate(text, controller.signal)
+        .then((translated) => setState({ status: 'done', text: translated }))
+        .catch((error: unknown) => {
+          if (!isAbortError(error)) setState({ status: 'error' });
+        });
+    }, DEBOUNCE_MS);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
   }, [visible, text]);
 
   const toggle = useCallback(() => setVisible((v) => !v), []);
