@@ -118,6 +118,20 @@ export const httpApi: OcrApi = {
     return response.blob();
   },
 
+  async speak(text, signal) {
+    const response = await request(
+      ENDPOINTS.tts,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      },
+      signal,
+      60_000,
+    );
+    return response.blob();
+  },
+
   async health() {
     try {
       await request(ENDPOINTS.health, { method: 'GET' }, undefined, 5_000);

@@ -11,7 +11,7 @@ interface AudioPlayerProps {
 
 export function AudioPlayer({ text, speech }: AudioPlayerProps) {
   const { t } = useI18n();
-  const { supported, speaking, rate, hasKannadaVoice, toggle, cycleRate } = speech;
+  const { supported, speaking, rate, hasKannadaVoice, error, toggle, cycleRate } = speech;
   const disabled = !supported || !text.trim();
 
   return (
@@ -49,6 +49,11 @@ export function AudioPlayer({ text, speech }: AudioPlayerProps) {
       </div>
       {!supported && <p className="hint">{t('listen.unsupported')}</p>}
       {supported && !hasKannadaVoice && <p className="hint">{t('listen.noVoice')}</p>}
+      {error && (
+        <p className="hint" role="alert">
+          {t('listen.error')}
+        </p>
+      )}
     </section>
   );
 }

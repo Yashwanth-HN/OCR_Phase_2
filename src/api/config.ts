@@ -10,5 +10,6 @@ export const ENDPOINTS = {
   translate: '/translate',
   feedback: '/feedback',
   exportPdf: '/export/pdf',
+  tts: '/tts',
   health: '/health',
 } as const;

@@ -70,6 +70,11 @@ export const mockApi: OcrApi = {
     throw new ApiError('PDF export needs the backend', 'unsupported');
   },
 
+  async speak() {
+    // Demo mode has no speech backend; useSpeech falls back to the browser's voice.
+    throw new ApiError('Speech needs the backend', 'unsupported');
+  },
+
   async health() {
     return true;
   },

@@ -144,6 +144,7 @@ export const en: Record<MessageKey, string> = {
   'listen.stop': 'Stop',
   'listen.speed': 'Speed',
   'listen.unsupported': 'Speech is not supported in this browser',
+  'listen.error': 'Could not play the Kannada audio. Is the backend running?',
   'listen.noVoice': 'No Kannada voice found on this device. Add one in your device settings.',
 
   'tr.title': 'English translation',

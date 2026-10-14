@@ -43,6 +43,7 @@ const ENDPOINT_DOCS: Endpoint[] = [
   { method: 'POST', path: ENDPOINTS.translate, summary: 'application/json', body: '{ "text": "…", "source": "kn", "target": "en" } → { "translation": "…" }' },
   { method: 'POST', path: ENDPOINTS.feedback, summary: 'application/json', body: '{ "job_id", "line_id", "original", "corrected", "mode", "text_type" }' },
   { method: 'POST', path: ENDPOINTS.exportPdf, summary: 'application/json', body: '{ "title": "…", "text": "…" } → application/pdf' },
+  { method: 'POST', path: ENDPOINTS.tts, summary: 'application/json', body: '{ "text": "…" } → audio/wav' },
   { method: 'GET', path: ENDPOINTS.health, summary: '', body: '200 OK' },
 ];
 
