@@ -35,16 +35,22 @@
   font-weight: 800;
 }
 .brand__mark {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
+  width: 46px;
+  height: 46px;
+  flex: none;
+  border-radius: 50%;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, var(--brand), var(--accent));
-  color: #fff;
-  box-shadow: 0 4px 14px var(--hero-glow);
-  font-size: 1.25rem;
+  background: linear-gradient(to bottom, var(--flag-yellow) 50%, var(--flag-red) 50%);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25), inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+  color: #111;
+  font-family: var(--font-kn);
+  font-size: 0.74rem;
   font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  /* White outline, like the map in the flag badge, keeps the text readable on both halves. */
+  text-shadow: 0 0 2px #fff, 0 0 2px #fff, 0 0 1px #fff;
 }
 .brand__text {
   display: flex;

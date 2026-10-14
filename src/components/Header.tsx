@@ -19,8 +19,9 @@ export function Header() {
       </a>
       <div className="site-header__inner">
         <Link to="/" className="brand" aria-label={`${t('brand.name')} · ${t('brand.tagline')}`}>
+          {/* Karnataka flag badge: yellow over red, with ಕನ್ನಡ in the middle. */}
           <span className="brand__mark" lang="kn" aria-hidden="true">
-            ಕ
+            ಕನ್ನಡ
           </span>
           <span className="brand__text">
             <span className="brand__name">{t('brand.name')}</span>
