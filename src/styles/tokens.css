@@ -1,40 +1,64 @@
+/*
+ * Design tokens. Every colour in the app comes from here, so light and dark mode stay consistent.
+ * Palette: slate neutrals, indigo brand, sky-blue accent.
+ */
 :root {
-  --ink: #0e1630;
-  --navy: #14213d;
-  --saffron: #f2a900;
-  --saffron-soft: #fff3d1;
-  --red: #b3122b;
-  --green: #138a4b;
-  --amber: #c27c00;
+  /* Brand: indigo with a sky-blue accent */
+  --brand: #4f46e5;
+  --brand-strong: #4338ca;
+  --brand-soft: #eef2ff;
+  --brand-soft-fg: #3730a3;
+  --on-brand: #ffffff;
+  --accent: #0ea5e9;
 
-  --bg: #f6f7fb;
+  /* Neutrals (slate) */
+  --bg: #f8fafc;
   --surface: #ffffff;
-  --surface-2: #eef0f7;
-  --text: #0e1630;
-  --muted: #4a5468;
-  --border: #e3e6ef;
-  --primary: #14213d;
-  --primary-text: #ffffff;
-  --accent: #f2a900;
-  --accent-text: #0e1630;
-  --danger: #b3122b;
-  --focus: #1b5fd6;
+  --surface-2: #f1f5f9;
+  --text: #0f172a;
+  --muted: #475569;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --primary: var(--brand);
+  --primary-text: var(--on-brand);
+  --focus: #4f46e5;
+  --danger: #dc2626;
 
-  --ok-bg: #e2f5ea;
-  --ok-fg: #0d6b39;
-  --warn-bg: #fff1cf;
-  --warn-fg: #8a5a00;
-  --bad-bg: #fde4e8;
-  --bad-fg: #9a0f24;
-  --info-bg: #e5ecfb;
-  --info-fg: #1f3f8f;
+  /* Status */
+  --green: #059669;
+  --amber: #d97706;
+  --red: #dc2626;
+  --ok-bg: #ecfdf5;
+  --ok-fg: #047857;
+  --warn-bg: #fffbeb;
+  --warn-fg: #b45309;
+  --bad-bg: #fef2f2;
+  --bad-fg: #b91c1c;
+  --info-bg: #eff6ff;
+  --info-fg: #1d4ed8;
+
+  /* Surfaces that used to be hard-coded */
+  --hero-from: #ffffff;
+  --hero-to: #eef2ff;
+  --hero-glow: rgba(79, 70, 229, 0.16);
+  --hero-glow-2: rgba(14, 165, 233, 0.12);
+  --hero-dot: rgba(15, 23, 42, 0.06);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: #e2e8f0;
+  --glass-text: #0f172a;
+  --toolbar-bg: #ffffff;
+  --overlay: rgba(15, 23, 42, 0.45);
+  --inverse-bg: #0f172a;
+  --inverse-text: #f8fafc;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+  --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.12);
+  color-scheme: light;
 
   --radius-sm: 10px;
   --radius: 16px;
   --radius-lg: 24px;
-  --shadow-sm: 0 1px 2px rgba(14, 22, 48, 0.06), 0 1px 3px rgba(14, 22, 48, 0.06);
-  --shadow: 0 8px 24px rgba(14, 22, 48, 0.08);
-  --shadow-lg: 0 24px 60px rgba(14, 22, 48, 0.18);
 
   --font-kn: 'Noto Sans Kannada', 'Noto Sans', system-ui, sans-serif;
   --font-display: 'Sora', 'Noto Sans Kannada', 'Noto Sans', system-ui, sans-serif;
@@ -42,55 +66,105 @@
 
   --header-h: 68px;
   --container: 1200px;
-  color-scheme: light;
 }
 
 :root[data-theme='dark'] {
-  --bg: #0b1020;
-  --surface: #121a36;
-  --surface-2: #1a2347;
-  --text: #eef1fb;
-  --muted: #a3adc7;
-  --border: #263056;
-  --primary: #f2a900;
-  --primary-text: #0e1630;
-  --focus: #7fb0ff;
+  --brand: #818cf8;
+  --brand-strong: #a5b4fc;
+  --brand-soft: rgba(129, 140, 248, 0.14);
+  --brand-soft-fg: #c7d2fe;
+  --on-brand: #0b1120;
+  --accent: #38bdf8;
 
-  --ok-bg: #11392a;
-  --ok-fg: #6fe0a3;
-  --warn-bg: #3d3010;
-  --warn-fg: #ffd36b;
-  --bad-bg: #431722;
-  --bad-fg: #ff9fb0;
-  --info-bg: #1a2a58;
-  --info-fg: #a9c3ff;
+  --bg: #0b1120;
+  --surface: #111827;
+  --surface-2: #1e293b;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --border: #1f2a3d;
+  --border-strong: #334155;
+  --focus: #a5b4fc;
+  --danger: #ef4444;
+
+  --green: #10b981;
+  --amber: #f59e0b;
+  --red: #f43f5e;
+  --ok-bg: rgba(16, 185, 129, 0.14);
+  --ok-fg: #6ee7b7;
+  --warn-bg: rgba(245, 158, 11, 0.14);
+  --warn-fg: #fcd34d;
+  --bad-bg: rgba(244, 63, 94, 0.14);
+  --bad-fg: #fda4af;
+  --info-bg: rgba(59, 130, 246, 0.16);
+  --info-fg: #93c5fd;
+
+  --hero-from: #0b1120;
+  --hero-to: #111a33;
+  --hero-glow: rgba(129, 140, 248, 0.22);
+  --hero-glow-2: rgba(56, 189, 248, 0.12);
+  --hero-dot: rgba(255, 255, 255, 0.05);
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-text: #e2e8f0;
+  --toolbar-bg: #0f172a;
+  --overlay: rgba(2, 6, 23, 0.6);
+  --inverse-bg: #e2e8f0;
+  --inverse-text: #0f172a;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.5);
   color-scheme: dark;
 }
 
+/* Before the app sets data-theme (first paint), follow the OS setting. */
 @media (prefers-color-scheme: dark) {
-  :root[data-theme='system'] {
-    --bg: #0b1020;
-    --surface: #121a36;
-    --surface-2: #1a2347;
-    --text: #eef1fb;
-    --muted: #a3adc7;
-    --border: #263056;
-    --primary: #f2a900;
-    --primary-text: #0e1630;
-    --focus: #7fb0ff;
-    --ok-bg: #11392a;
-    --ok-fg: #6fe0a3;
-    --warn-bg: #3d3010;
-    --warn-fg: #ffd36b;
-    --bad-bg: #431722;
-    --bad-fg: #ff9fb0;
-    --info-bg: #1a2a58;
-    --info-fg: #a9c3ff;
-    --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-    color-scheme: dark;
+  :root:not([data-theme]) {
+  --brand: #818cf8;
+  --brand-strong: #a5b4fc;
+  --brand-soft: rgba(129, 140, 248, 0.14);
+  --brand-soft-fg: #c7d2fe;
+  --on-brand: #0b1120;
+  --accent: #38bdf8;
+
+  --bg: #0b1120;
+  --surface: #111827;
+  --surface-2: #1e293b;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --border: #1f2a3d;
+  --border-strong: #334155;
+  --focus: #a5b4fc;
+  --danger: #ef4444;
+
+  --green: #10b981;
+  --amber: #f59e0b;
+  --red: #f43f5e;
+  --ok-bg: rgba(16, 185, 129, 0.14);
+  --ok-fg: #6ee7b7;
+  --warn-bg: rgba(245, 158, 11, 0.14);
+  --warn-fg: #fcd34d;
+  --bad-bg: rgba(244, 63, 94, 0.14);
+  --bad-fg: #fda4af;
+  --info-bg: rgba(59, 130, 246, 0.16);
+  --info-fg: #93c5fd;
+
+  --hero-from: #0b1120;
+  --hero-to: #111a33;
+  --hero-glow: rgba(129, 140, 248, 0.22);
+  --hero-glow-2: rgba(56, 189, 248, 0.12);
+  --hero-dot: rgba(255, 255, 255, 0.05);
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-text: #e2e8f0;
+  --toolbar-bg: #0f172a;
+  --overlay: rgba(2, 6, 23, 0.6);
+  --inverse-bg: #e2e8f0;
+  --inverse-text: #0f172a;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
   }
 }
