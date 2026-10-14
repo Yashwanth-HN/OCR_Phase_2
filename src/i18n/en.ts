@@ -2,6 +2,12 @@ import type { MessageKey } from '@/i18n/kn';
 
 export const en: Record<MessageKey, string> = {
   'brand.name': 'Kannada OCR',
+  'brand.tagline': 'Deep-learning text recognition',
+  'model.online': 'Model online',
+  'model.offline': 'Model offline',
+  'model.checking': 'Connecting…',
+  'model.demo': 'Demo mode',
+  'model.version': 'OCR model: {version}',
   'a11y.skip': 'Skip to main content',
   'theme.toggle': 'Toggle theme',
   'lang.toggle': 'Change language',
@@ -10,7 +16,6 @@ export const en: Record<MessageKey, string> = {
   'nav.scan': 'Scan',
   'nav.batch': 'Batch',
   'nav.history': 'History',
-  'nav.api': 'API',
   'nav.main': 'Main navigation',
 
   'hero.badge': 'Words · Paragraphs · Full pages',
@@ -211,17 +216,6 @@ export const en: Record<MessageKey, string> = {
   'hist.clearConfirm': 'All results in your history will be deleted. Continue?',
   'hist.privacy': 'History stays in this browser only; images are never saved.',
   'hist.deleteOne': 'Delete this entry',
-
-  'api.title': 'API docs',
-  'api.intro': 'Use these endpoints to call Kannada OCR from your own applications.',
-  'api.status': 'Server status',
-  'api.check': 'Check',
-  'api.online': 'Online',
-  'api.offline': "Couldn't connect",
-  'api.mock': 'Running in demo (mock) mode — not using a real server.',
-  'api.endpoints': 'Endpoints',
-  'api.example': 'Example',
-  'api.response': 'Response',
 
   'err.generic': 'Something went wrong. Please try again.',
   'err.notFound': 'Page not found',

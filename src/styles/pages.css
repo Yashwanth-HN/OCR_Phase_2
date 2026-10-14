@@ -115,7 +115,6 @@
 
 /* ---------- Home body ---------- */
 .home-body { padding-block: 48px 72px; }
-.home-body__link { display: block; text-align: center; margin-top: 16px; }
 
 .upload-card {
   display: grid;

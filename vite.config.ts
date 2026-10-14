@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 5173,
       proxy: {
-        // Regex key: only /api/... is proxied, so the in-app /api docs page still loads on refresh.
+        // Regex key: only /api/... is proxied (not a bare /api URL).
         '^/api/.*': {
           target: DEV_PROXY_TARGET,
           changeOrigin: true,

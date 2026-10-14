@@ -1,6 +1,12 @@
 /** Kannada (default). The key set defined here is the source of truth for `en.ts`. */
 export const kn = {
   'brand.name': 'ಕನ್ನಡ OCR',
+  'brand.tagline': 'ಡೀಪ್ ಲರ್ನಿಂಗ್ ಪಠ್ಯ ಗುರುತಿಸುವಿಕೆ',
+  'model.online': 'ಮಾದರಿ ಸಿದ್ಧ',
+  'model.offline': 'ಮಾದರಿ ಲಭ್ಯವಿಲ್ಲ',
+  'model.checking': 'ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ…',
+  'model.demo': 'ಡೆಮೊ ಮೋಡ್',
+  'model.version': 'OCR ಮಾದರಿ: {version}',
   'a11y.skip': 'ಮುಖ್ಯ ವಿಷಯಕ್ಕೆ ಹೋಗಿ',
   'theme.toggle': 'ಥೀಮ್ ಬದಲಿಸಿ',
   'lang.toggle': 'ಭಾಷೆ ಬದಲಿಸಿ',
@@ -9,7 +15,6 @@ export const kn = {
   'nav.scan': 'ಸ್ಕ್ಯಾನ್',
   'nav.batch': 'ಬ್ಯಾಚ್',
   'nav.history': 'ಇತಿಹಾಸ',
-  'nav.api': 'API',
   'nav.main': 'ಮುಖ್ಯ ಮೆನು',
 
   'hero.badge': 'ಪದ · ಪ್ಯಾರಾಗ್ರಾಫ್ · ಪೂರ್ಣ ಪುಟ',
@@ -211,17 +216,6 @@ export const kn = {
   'hist.clearConfirm': 'ಇತಿಹಾಸದಲ್ಲಿರುವ ಎಲ್ಲಾ ಫಲಿತಾಂಶಗಳನ್ನು ಅಳಿಸಲಾಗುತ್ತದೆ. ಮುಂದುವರಿಯುವುದೇ?',
   'hist.privacy': 'ಇತಿಹಾಸವು ನಿಮ್ಮ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಮಾತ್ರ ಉಳಿಯುತ್ತದೆ; ಚಿತ್ರಗಳನ್ನು ಉಳಿಸಲಾಗುವುದಿಲ್ಲ.',
   'hist.deleteOne': 'ಈ ನಮೂದು ಅಳಿಸಿ',
-
-  'api.title': 'API ಡಾಕ್ಸ್',
-  'api.intro': 'ನಿಮ್ಮ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಿಂದ ಕನ್ನಡ OCR ಬಳಸಲು ಈ ಎಂಡ್‌ಪಾಯಿಂಟ್‌ಗಳನ್ನು ಬಳಸಿ.',
-  'api.status': 'ಸರ್ವರ್ ಸ್ಥಿತಿ',
-  'api.check': 'ಪರಿಶೀಲಿಸಿ',
-  'api.online': 'ಆನ್‌ಲೈನ್ ಇದೆ',
-  'api.offline': 'ಸಂಪರ್ಕ ಸಾಧ್ಯವಾಗಲಿಲ್ಲ',
-  'api.mock': 'ಡೆಮೊ (ಮಾಕ್) ಮೋಡ್‌ನಲ್ಲಿ ಚಲಿಸುತ್ತಿದೆ — ನಿಜವಾದ ಸರ್ವರ್ ಬಳಸುತ್ತಿಲ್ಲ.',
-  'api.endpoints': 'ಎಂಡ್‌ಪಾಯಿಂಟ್‌ಗಳು',
-  'api.example': 'ಉದಾಹರಣೆ',
-  'api.response': 'ಪ್ರತಿಕ್ರಿಯೆ',
 
   'err.generic': 'ಏನೋ ತಪ್ಪಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.',
   'err.notFound': 'ಪುಟ ಸಿಗಲಿಲ್ಲ',

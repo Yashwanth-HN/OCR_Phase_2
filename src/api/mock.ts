@@ -76,6 +76,6 @@ export const mockApi: OcrApi = {
   },
 
   async health() {
-    return true;
+    return { online: true, modelVersion: 'demo-mock' };
   },
 };

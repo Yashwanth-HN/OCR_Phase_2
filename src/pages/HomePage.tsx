@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { CameraDialog } from '@/components/CameraDialog';
 import { Dropzone } from '@/components/Dropzone';
 import { FeatureBento } from '@/components/FeatureBento';
@@ -116,9 +116,6 @@ export default function HomePage() {
 
         <FeatureBento />
         <Pipeline />
-        <p className="home-body__link">
-          <Link to="/api">{t('nav.api')} →</Link>
-        </p>
       </div>
 
       <Footer />

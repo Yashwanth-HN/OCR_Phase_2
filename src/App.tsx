@@ -7,7 +7,6 @@ const HomePage = lazy(() => import('@/pages/HomePage'));
 const WorkspacePage = lazy(() => import('@/pages/WorkspacePage'));
 const BatchPage = lazy(() => import('@/pages/BatchPage'));
 const HistoryPage = lazy(() => import('@/pages/HistoryPage'));
-const ApiPage = lazy(() => import('@/pages/ApiPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 export default function App() {
@@ -18,7 +17,6 @@ export default function App() {
         <Route path="workspace/:id" element={<WorkspacePage />} />
         <Route path="batch" element={<BatchPage />} />
         <Route path="history" element={<HistoryPage />} />
-        <Route path="api" element={<ApiPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

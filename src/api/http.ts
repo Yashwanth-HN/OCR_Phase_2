@@ -134,10 +134,12 @@ export const httpApi: OcrApi = {
 
   async health() {
     try {
-      await request(ENDPOINTS.health, { method: 'GET' }, undefined, 5_000);
-      return true;
+      const response = await request(ENDPOINTS.health, { method: 'GET' }, undefined, 5_000);
+      const body = (await response.json().catch(() => ({}))) as Record<string, unknown>;
+      const version = body.model_version ?? body.modelVersion;
+      return { online: true, modelVersion: typeof version === 'string' ? version : undefined };
     } catch {
-      return false;
+      return { online: false };
     }
   },
 };
