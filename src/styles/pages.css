@@ -49,8 +49,8 @@
   width: min(100%, 380px);
   padding: 20px;
   background: #ffffff;
-  color: #1e293b;
-  border: 1px solid #e2e8f0;
+  color: #1c1917;
+  border: 1px solid #e7e5e4;
   border-radius: 14px;
   box-shadow: var(--shadow-lg);
   transform: rotate(-3deg);
@@ -61,12 +61,12 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.75rem;
-  color: #64748b;
+  color: #78716c;
   margin-bottom: 10px;
 }
 /* The preview is a sheet of paper: always light, whatever the theme. */
-.hero-preview__paper .chip--warm { background: #eef2ff; color: #3730a3; }
-.hero-preview__paper .skeleton { background: #e2e8f0; animation: none; }
+.hero-preview__paper .chip--warm { background: var(--paper-chip-bg); color: var(--paper-chip-fg); }
+.hero-preview__paper .skeleton { background: #e7e5e4; animation: none; }
 .hero-preview__body { display: grid; gap: 8px; }
 .hero-preview__line {
   position: relative;
@@ -202,7 +202,7 @@
 }
 .tile:nth-child(1) { grid-column: span 2; }
 .tile--dark {
-  background: linear-gradient(140deg, #4f46e5, #0ea5e9);
+  background: linear-gradient(140deg, var(--grad-from), var(--grad-to));
   color: #fff;
   border-color: transparent;
 }
@@ -223,7 +223,7 @@
 .tile--dark .chip { background: rgba(255, 255, 255, 0.16); color: #fff; }
 .tile--dark .wave__bar { background: rgba(255, 255, 255, 0.85); }
 .bubbles { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.bubbles__accent { color: #e0f2fe; font-weight: 700; }
+.bubbles__accent { color: #ffedd5; font-weight: 700; }
 
 .pipeline {
   display: flex;

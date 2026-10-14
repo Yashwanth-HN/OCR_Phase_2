@@ -1,32 +1,32 @@
 /*
  * Design tokens. Every colour in the app comes from here, so light and dark mode stay consistent.
- * Palette: slate neutrals, indigo brand, sky-blue accent.
+ * Palette: warm stone neutrals, orange brand, red accent.
  */
 :root {
   /* Brand: indigo with a sky-blue accent */
-  --brand: #4f46e5;
-  --brand-strong: #4338ca;
-  --brand-soft: #eef2ff;
-  --brand-soft-fg: #3730a3;
+  --brand: #c2410c;
+  --brand-strong: #9a3412;
+  --brand-soft: #fff7ed;
+  --brand-soft-fg: #9a3412;
   --on-brand: #ffffff;
-  --accent: #0ea5e9;
+  --accent: #dc2626;
 
   /* Neutrals (slate) */
-  --bg: #f8fafc;
+  --bg: #fafaf9;
   --surface: #ffffff;
-  --surface-2: #f1f5f9;
-  --text: #0f172a;
-  --muted: #475569;
-  --border: #e2e8f0;
-  --border-strong: #cbd5e1;
+  --surface-2: #f5f5f4;
+  --text: #1c1917;
+  --muted: #57534e;
+  --border: #e7e5e4;
+  --border-strong: #d6d3d1;
   --primary: var(--brand);
   --primary-text: var(--on-brand);
-  --focus: #4f46e5;
+  --focus: #c2410c;
   --danger: #dc2626;
 
   /* Status */
   --green: #059669;
-  --amber: #d97706;
+  --amber: #ca8a04; /* yellow, distinct from the orange brand */
   --red: #dc2626;
   --ok-bg: #ecfdf5;
   --ok-fg: #047857;
@@ -39,17 +39,21 @@
 
   /* Surfaces that used to be hard-coded */
   --hero-from: #ffffff;
-  --hero-to: #eef2ff;
-  --hero-glow: rgba(79, 70, 229, 0.16);
-  --hero-glow-2: rgba(14, 165, 233, 0.12);
-  --hero-dot: rgba(15, 23, 42, 0.06);
+  --hero-to: #fff7ed;
+  --hero-glow: rgba(234, 88, 12, 0.16);
+  --hero-glow-2: rgba(220, 38, 38, 0.10);
+  --hero-dot: rgba(28, 25, 23, 0.06);
   --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: #e2e8f0;
-  --glass-text: #0f172a;
+  --glass-border: #e7e5e4;
+  --glass-text: #1c1917;
   --toolbar-bg: #ffffff;
-  --overlay: rgba(15, 23, 42, 0.45);
-  --inverse-bg: #0f172a;
-  --inverse-text: #f8fafc;
+  --overlay: rgba(28, 25, 23, 0.45);
+  --inverse-bg: #1c1917;
+  --inverse-text: #fafaf9;
+  --grad-from: #f97316;
+  --grad-to: #dc2626;
+  --paper-chip-bg: #fff7ed;
+  --paper-chip-fg: #9a3412;
 
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.06);
   --shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
@@ -69,25 +73,25 @@
 }
 
 :root[data-theme='dark'] {
-  --brand: #818cf8;
-  --brand-strong: #a5b4fc;
-  --brand-soft: rgba(129, 140, 248, 0.14);
-  --brand-soft-fg: #c7d2fe;
-  --on-brand: #0b1120;
-  --accent: #38bdf8;
+  --brand: #fb923c;
+  --brand-strong: #fdba74;
+  --brand-soft: rgba(251, 146, 60, 0.14);
+  --brand-soft-fg: #fdba74;
+  --on-brand: #1c0d02;
+  --accent: #f87171;
 
-  --bg: #0b1120;
-  --surface: #111827;
-  --surface-2: #1e293b;
-  --text: #e2e8f0;
-  --muted: #94a3b8;
-  --border: #1f2a3d;
-  --border-strong: #334155;
-  --focus: #a5b4fc;
+  --bg: #0c0a09;
+  --surface: #1c1917;
+  --surface-2: #292524;
+  --text: #f5f5f4;
+  --muted: #a8a29e;
+  --border: #2e2a27;
+  --border-strong: #44403c;
+  --focus: #fdba74;
   --danger: #ef4444;
 
   --green: #10b981;
-  --amber: #f59e0b;
+  --amber: #facc15;
   --red: #f43f5e;
   --ok-bg: rgba(16, 185, 129, 0.14);
   --ok-fg: #6ee7b7;
@@ -98,18 +102,18 @@
   --info-bg: rgba(59, 130, 246, 0.16);
   --info-fg: #93c5fd;
 
-  --hero-from: #0b1120;
-  --hero-to: #111a33;
-  --hero-glow: rgba(129, 140, 248, 0.22);
-  --hero-glow-2: rgba(56, 189, 248, 0.12);
+  --hero-from: #0c0a09;
+  --hero-to: #1f1310;
+  --hero-glow: rgba(251, 146, 60, 0.20);
+  --hero-glow-2: rgba(248, 113, 113, 0.12);
   --hero-dot: rgba(255, 255, 255, 0.05);
   --glass-bg: rgba(255, 255, 255, 0.06);
   --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-text: #e2e8f0;
-  --toolbar-bg: #0f172a;
-  --overlay: rgba(2, 6, 23, 0.6);
-  --inverse-bg: #e2e8f0;
-  --inverse-text: #0f172a;
+  --glass-text: #f5f5f4;
+  --toolbar-bg: #171412;
+  --overlay: rgba(12, 10, 9, 0.6);
+  --inverse-bg: #f5f5f4;
+  --inverse-text: #1c1917;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
@@ -120,25 +124,25 @@
 /* Before the app sets data-theme (first paint), follow the OS setting. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
-  --brand: #818cf8;
-  --brand-strong: #a5b4fc;
-  --brand-soft: rgba(129, 140, 248, 0.14);
-  --brand-soft-fg: #c7d2fe;
-  --on-brand: #0b1120;
-  --accent: #38bdf8;
+  --brand: #fb923c;
+  --brand-strong: #fdba74;
+  --brand-soft: rgba(251, 146, 60, 0.14);
+  --brand-soft-fg: #fdba74;
+  --on-brand: #1c0d02;
+  --accent: #f87171;
 
-  --bg: #0b1120;
-  --surface: #111827;
-  --surface-2: #1e293b;
-  --text: #e2e8f0;
-  --muted: #94a3b8;
-  --border: #1f2a3d;
-  --border-strong: #334155;
-  --focus: #a5b4fc;
+  --bg: #0c0a09;
+  --surface: #1c1917;
+  --surface-2: #292524;
+  --text: #f5f5f4;
+  --muted: #a8a29e;
+  --border: #2e2a27;
+  --border-strong: #44403c;
+  --focus: #fdba74;
   --danger: #ef4444;
 
   --green: #10b981;
-  --amber: #f59e0b;
+  --amber: #facc15;
   --red: #f43f5e;
   --ok-bg: rgba(16, 185, 129, 0.14);
   --ok-fg: #6ee7b7;
@@ -149,18 +153,18 @@
   --info-bg: rgba(59, 130, 246, 0.16);
   --info-fg: #93c5fd;
 
-  --hero-from: #0b1120;
-  --hero-to: #111a33;
-  --hero-glow: rgba(129, 140, 248, 0.22);
-  --hero-glow-2: rgba(56, 189, 248, 0.12);
+  --hero-from: #0c0a09;
+  --hero-to: #1f1310;
+  --hero-glow: rgba(251, 146, 60, 0.20);
+  --hero-glow-2: rgba(248, 113, 113, 0.12);
   --hero-dot: rgba(255, 255, 255, 0.05);
   --glass-bg: rgba(255, 255, 255, 0.06);
   --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-text: #e2e8f0;
-  --toolbar-bg: #0f172a;
-  --overlay: rgba(2, 6, 23, 0.6);
-  --inverse-bg: #e2e8f0;
-  --inverse-text: #0f172a;
+  --glass-text: #f5f5f4;
+  --toolbar-bg: #171412;
+  --overlay: rgba(12, 10, 9, 0.6);
+  --inverse-bg: #f5f5f4;
+  --inverse-text: #1c1917;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
