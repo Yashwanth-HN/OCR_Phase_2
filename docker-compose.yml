@@ -1,0 +1,25 @@
+# Runs the UI (nginx, http://localhost:8080) and the OCR backend together.
+#   docker compose up --build
+# The backend lives in the separate OCR repo next to this one; adjust BACKEND_DIR if you move it.
+services:
+  backend:
+    build: ${BACKEND_DIR:-../ocr_project/OCR/backend}
+    environment:
+      FRONTEND_ORIGINS: http://localhost:8080
+    volumes:
+      - ocr-feedback:/app/data   # /feedback corrections survive restarts
+    restart: unless-stopped
+
+  frontend:
+    build: .
+    environment:
+      BACKEND_URL: http://backend:8000
+    ports:
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  ocr-feedback:

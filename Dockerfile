@@ -4,10 +4,10 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-# Build-time config: leave VITE_API_BASE as /api so nginx proxies to the backend.
-ARG VITE_API_BASE=/api
+# Build-time config: leave VITE_API_BASE_URL as /api so nginx proxies to the backend.
+ARG VITE_API_BASE_URL=/api
 ARG VITE_USE_MOCK=false
-ENV VITE_API_BASE=$VITE_API_BASE VITE_USE_MOCK=$VITE_USE_MOCK
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL VITE_USE_MOCK=$VITE_USE_MOCK
 RUN npm run build
 
 FROM nginx:1.27-alpine

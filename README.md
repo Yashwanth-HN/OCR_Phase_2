@@ -24,7 +24,7 @@ npm run dev                    # http://localhost:5173
 
 Set `VITE_USE_MOCK=false`. In dev the frontend calls `/api/...`, which Vite forwards to your server
 (strip `/api`). Default target is `http://localhost:8000`; change `VITE_DEV_PROXY_TARGET` if needed.
-If your server is on another origin, enable CORS there or set `VITE_API_BASE`.
+If your server is on another origin, enable CORS there or set `VITE_API_BASE_URL`.
 
 ### `POST /ocr` — multipart/form-data
 
