@@ -98,6 +98,7 @@ export const en: Record<MessageKey, string> = {
   'footer.right': 'Information Science · Dr. Ambedkar Institute of Technology',
 
   'ws.newUpload': '← New upload',
+  'ws.uploadNew': 'Upload new image',
   'ws.pageOf': 'Page {n} / {total}',
   'ws.layout': 'Detected layout · {n} lines',
   'ws.zoomOut': 'Zoom −',

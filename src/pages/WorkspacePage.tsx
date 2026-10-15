@@ -1,19 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { DocumentViewer } from '@/components/DocumentViewer';
 import { EnhancePanel } from '@/components/EnhancePanel';
 import { ExportMenu } from '@/components/ExportMenu';
+import { UploadIcon } from '@/components/icons';
 import { ReviewCard } from '@/components/ReviewCard';
 import { Segmented } from '@/components/Segmented';
 import { ShortcutsCard } from '@/components/ShortcutsCard';
 import { TextPanel } from '@/components/TextPanel';
 import { TranslationCard } from '@/components/TranslationCard';
 import { useExporter } from '@/hooks/useExporter';
+import { useIngest } from '@/hooks/useIngest';
 import { useShortcuts } from '@/hooks/useShortcuts';
 import { useSpeech } from '@/hooks/useSpeech';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useI18n } from '@/i18n';
+import { ACCEPT_ATTR } from '@/lib/constants';
 import { jobText } from '@/lib/job';
 import { useAppStore, useJob } from '@/store/useAppStore';
 import type { EnhanceSettings, OcrMode, TextType } from '@/types';
@@ -26,6 +29,9 @@ export default function WorkspacePage() {
   const updateJob = useAppStore((s) => s.updateJob);
   const runJob = useAppStore((s) => s.runJob);
   const changeMode = useAppStore((s) => s.changeMode);
+  const setSettings = useAppStore((s) => s.setSettings);
+  const { start } = useIngest();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [missing, setMissing] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
@@ -78,6 +84,14 @@ export default function WorkspacePage() {
   const onTextType = (textType: TextType) => {
     updateJob(job.id, { textType });
   };
+  /** Pick another image right here; it is read with the same mode, text type and enhancement as this one. */
+  const onNewFile = (files: FileList | null) => {
+    const picked = files ? Array.from(files) : [];
+    if (fileInputRef.current) fileInputRef.current.value = ''; // allow picking the same file again
+    if (picked.length === 0) return;
+    setSettings({ mode: job.mode, textType: job.textType, enhance: { ...job.enhance } });
+    start(picked);
+  };
 
   return (
     <div className="workspace container page">
@@ -104,6 +118,22 @@ export default function WorkspacePage() {
             { value: 'paragraph', label: t('mode.paragraph') },
             { value: 'page', label: t('mode.page') },
           ]}
+        />
+        <button
+          type="button"
+          className="btn btn--outline workspace__upload"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={busy}
+        >
+          <UploadIcon size={18} />
+          {t('ws.uploadNew')}
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept={ACCEPT_ATTR}
+          hidden
+          onChange={(e) => onNewFile(e.target.files)}
         />
         <ExportMenu exporter={exporter} disabled={!text.trim()} />
       </div>

@@ -98,6 +98,7 @@ export const kn = {
   'footer.right': 'ಮಾಹಿತಿ ವಿಜ್ಞಾನ · ಡಾ. ಅಂಬೇಡ್ಕರ್ ತಾಂತ್ರಿಕ ಸಂಸ್ಥೆ',
 
   'ws.newUpload': '← ಹೊಸ ಅಪ್‌ಲೋಡ್',
+  'ws.uploadNew': 'ಹೊಸ ಚಿತ್ರ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ',
   'ws.pageOf': 'ಪುಟ {n} / {total}',
   'ws.layout': 'ಪತ್ತೆಯಾದ ಲೇಔಟ್ · {n} ಸಾಲುಗಳು',
   'ws.zoomOut': 'ಚಿಕ್ಕದು −',
