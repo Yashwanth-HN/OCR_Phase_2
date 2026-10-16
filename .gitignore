@@ -1,7 +1,15 @@
+# frontend
 node_modules
 dist
 .env
 .env.local
 *.local
-.DS_Store
 coverage
+# backend
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+# OS
+.DS_Store
