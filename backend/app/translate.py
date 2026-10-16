@@ -79,7 +79,22 @@ def _chunks(paras: list[str]) -> list[str]:
 
 
 def _google(text: str, source: str, target: str) -> str:
-    url = _GTX + "?" + urllib.parse.urlencode({"client": "gtx", "sl": source, "tl": target, "dt": "t"})
+    # Google sometimes answers one client id with a 429 "Sorry..." page (seen from Python while curl still
+    # worked); the same endpoint with the Chrome-extension client id kept working, so fall back to it.
+    for client in _CLIENTS:
+        try:
+            return _google_once(text, source, target, client)
+        except TranslationFailed as exc:
+            if exc.status != 503 or client == _CLIENTS[-1]:
+                raise
+    raise AssertionError("unreachable")
+
+
+_CLIENTS = ("gtx", "dict-chrome-ex")
+
+
+def _google_once(text: str, source: str, target: str, client: str) -> str:
+    url = _GTX + "?" + urllib.parse.urlencode({"client": client, "sl": source, "tl": target, "dt": "t"})
     req = urllib.request.Request(
         url,
         data=urllib.parse.urlencode({"q": text}).encode(),  # POST: no URL-length limit

@@ -11,7 +11,7 @@ pymupdf>=1.24
 fpdf2>=2.8
 uharfbuzz>=0.39
 # offline Kannada text-to-speech for the Listen button (facebook/mms-tts-kan)
-transformers>=4.40
+transformers>=4.40,<5   # 5.x needs torch>=2.5; torch is pinned to 2.4.1 above
 # tests
 pytest>=8
 httpx>=0.27
