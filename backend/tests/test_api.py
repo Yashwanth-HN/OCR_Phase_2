@@ -280,3 +280,62 @@ def test_normal_size_text_is_not_upscaled():
 
     g = cv2.imdecode(np.frombuffer(render_png("ಕನ್ನಡ ಭಾಷೆ\nಮೈಸೂರು ಅರಮನೆ", dpi=150), np.uint8), cv2.IMREAD_GRAYSCALE)
     assert P.upscale_factor(g) == 1.0
+
+
+def test_drop_slivers_removes_thin_low_confidence_line_only():
+    from app.pipeline import drop_slivers
+
+    def line(y, h, conf):
+        return {"id": "", "text": "x", "confidence": conf, "box": {"x": 0.1, "y": y, "w": 0.8, "h": h}}
+
+    lines = [line(0.10, 0.08, 0.9), line(0.16, 0.03, 0.3),  # sliver: thin, overlaps line 0, low confidence
+             line(0.25, 0.08, 0.9), line(0.40, 0.03, 0.9),  # thin but confident: kept
+             line(0.55, 0.08, 0.8)]
+    kept = drop_slivers(lines, 0)
+    assert [l["box"]["y"] for l in kept] == [0.10, 0.25, 0.40, 0.55]
+    assert [l["id"] for l in kept] == ["p0l0", "p0l1", "p0l2", "p0l3"]
+
+
+@pytest.fixture(scope="module")
+def lexicon(client):
+    lx = main.state["recognizer"].lexicon
+    if lx is None:
+        pytest.skip("lexicon/kn_words.tsv not available")
+    return lx
+
+
+def fake_log_probs(lx, strong: str, weak: dict[int, str] | None = None) -> np.ndarray:
+    """Softmax output that spells `strong` confidently; weak[i] adds a hesitant extra token after strong token i
+    (probability 0.4 against blank 0.6), like a faint subscript the model nearly saw."""
+    toks = lx.tokens(strong)
+    n_cls = max(lx.char_to_idx.values()) + 1
+    rows = []
+    for i, t in enumerate(toks):
+        for cls in (t, 0):
+            r = np.full(n_cls, 1e-4)
+            r[cls] = 0.95
+            rows.append(r)
+        if weak and i in weak:
+            r = np.full(n_cls, 1e-4)
+            r[0], r[lx.tokens(weak[i])[0]] = 0.6, 0.4
+            rows.append(r)
+    p = np.array(rows)
+    return np.log(p / p.sum(1, keepdims=True))
+
+
+def test_lexicon_restores_a_faint_conjunct(lexicon):
+    # The model read ಶತುಗಳು (missing the ್ರ subscript) but did see a faint ್ರ: the dictionary word wins.
+    lp = fake_log_probs(lexicon, "ಶತುಗಳು", weak={1: "್ರ"})
+    assert lexicon.correct("ಶತುಗಳು", lp, []) == "ಶತ್ರುಗಳು"
+
+
+def test_lexicon_keeps_a_word_the_image_does_not_support(lexicon):
+    # Same reading with no trace of the subscript: correcting would contradict the image, so nothing changes.
+    lp = fake_log_probs(lexicon, "ಶತುಗಳು")
+    assert lexicon.correct("ಶತುಗಳು", lp, []) == "ಶತುಗಳು"
+
+
+def test_lexicon_never_changes_a_common_word_or_non_kannada(lexicon):
+    lp = fake_log_probs(lexicon, "ಕನ್ನಡ")
+    assert lexicon.correct("ಕನ್ನಡ", lp, ["ಕನ್ನಡದ"]) == "ಕನ್ನಡ"
+    assert lexicon.correct("2024", lp, []) == "2024"
