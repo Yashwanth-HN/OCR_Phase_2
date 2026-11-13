@@ -9,6 +9,7 @@ returns, from the same softmax output:
 from __future__ import annotations
 
 import hashlib
+import math
 import os
 import threading
 from collections import defaultdict
@@ -20,7 +21,7 @@ import numpy as np
 import torch
 
 from app import notebook_pipeline as nbp
-from app.lexicon import load_lexicon
+from app.lexicon import TokenTrigram, load_lexicon
 
 BACKEND_ROOT = Path(__file__).resolve().parent.parent
 
@@ -82,6 +83,12 @@ class Recognizer:
 
         # Kannada word list for dictionary correction (None if disabled or missing); see app/lexicon.py.
         self.lexicon = load_lexicon(self.idx_to_char)
+        # Token trigram for beam-search decoding (built from the word list; ~9 s at start-up). LM_ALPHA=0 turns it off.
+        self.lm_alpha = float(os.getenv("LM_ALPHA", "0"))
+        self.lm_beta = float(os.getenv("LM_BETA", "0"))
+        self.lm_beam_width = int(os.getenv("LM_BEAM_WIDTH", "8"))
+        self.trigram = TokenTrigram(self.lexicon) if self.lexicon is not None and self.lm_alpha > 0 else None
+        self._is_kn = {i: all("ಀ" <= ch <= "೿" for ch in c) for i, c in self.idx_to_char.items()}
 
         digest = hashlib.sha256(self.model_path.read_bytes()).hexdigest()[:8]
         self.model_version = model_version or f"{self.model_path.stem}-{digest}"
@@ -164,10 +171,71 @@ class Recognizer:
         ranked = sorted(beams.items(), key=lambda kv: sum(kv[1]), reverse=True)[:top]
         return [("".join(self.idx_to_char.get(i, "") for i in k), sum(v)) for k, v in ranked]
 
+    def _context(self, prefix: tuple) -> tuple[int, int]:
+        """Last two tokens of the current Kannada word in `prefix` (BOS-padded) for the trigram model."""
+        bos = TokenTrigram.BOS
+        out = []
+        for t in reversed(prefix):
+            if not self._is_kn[t] or len(out) == 2:
+                break
+            out.append(t)
+        out += [bos] * (2 - len(out))
+        return out[1], out[0]
+
+    def _beam_lm(self, probs: np.ndarray, top: int = 3) -> list[tuple[str, float]]:
+        """CTC prefix beam search with the token trigram fused in (shallow fusion [Hannun et al.]):
+        every emitted Kannada token is weighted by P_LM(token | previous two) ** LM_ALPHA * exp(LM_BETA)."""
+        lm, alpha, beta = self.trigram, self.lm_alpha, self.lm_beta
+        beams: dict[tuple, tuple[float, float]] = {(): (1.0, 0.0)}
+        for t in range(probs.shape[0]):
+            row = probs[t]
+            cand = np.where(row > 1e-3)[0]
+            nxt: dict[tuple, list[float]] = defaultdict(lambda: [0.0, 0.0])
+            for prefix, (pb, pnb) in beams.items():
+                total = pb + pnb
+                for c in cand:
+                    p = float(row[c])
+                    if c == 0:
+                        nxt[prefix][0] += total * p
+                        continue
+                    c = int(c)
+                    w = 1.0
+                    if self._is_kn[c]:
+                        a, b = self._context(prefix)
+                        w = math.exp(alpha * lm.logp(a, b, c) + beta)
+                    ext = prefix + (c,)
+                    if prefix and c == prefix[-1]:
+                        nxt[ext][1] += pb * p * w
+                        nxt[prefix][1] += pnb * p
+                    else:
+                        nxt[ext][1] += total * p * w
+            ranked = sorted(nxt.items(), key=lambda kv: kv[1][0] + kv[1][1], reverse=True)
+            beams = {k: (v[0], v[1]) for k, v in ranked[: self.lm_beam_width]}
+            norm = sum(a + b for a, b in beams.values()) or 1.0
+            beams = {k: (a / norm, b / norm) for k, (a, b) in beams.items()}
+        final = []
+        for k, (pb, pnb) in beams.items():
+            s = pb + pnb
+            if k and self._is_kn[k[-1]]:  # the last word should end where Kannada words end
+                a, b = self._context(k)
+                s *= math.exp(alpha * lm.logp(a, b, TokenTrigram.EOS))
+            final.append((k, s))
+        final.sort(key=lambda kv: kv[1], reverse=True)
+        norm = sum(s for _, s in final) or 1.0
+        return [("".join(self.idx_to_char.get(i, "") for i in k), s / norm) for k, s in final[:top]]
+
     def _decode(self, probs: np.ndarray) -> WordReading:
-        text, conf = self._greedy(probs)
-        alts = [(t, s) for t, s in self._beam(probs) if t != text and t.strip()]
-        return WordReading(text, conf, [t for t, _ in alts], [s for _, s in alts])
+        greedy, conf = self._greedy(probs)
+        if self.trigram is not None and self.lm_alpha > 0:
+            beams = [(t, s) for t, s in self._beam_lm(probs) if t.strip()]
+            # Confidence stays the visual one of the greedy path: it says how clearly the image shows the word.
+            text = beams[0][0] if beams else greedy
+            alts = [(t, s) for t, s in beams[1:] if t != text]
+            if greedy != text and greedy.strip():
+                alts.insert(0, (greedy, conf))
+            return WordReading(text, conf, [t for t, _ in alts], [s for _, s in alts])
+        alts = [(t, s) for t, s in self._beam(probs) if t != greedy and t.strip()]
+        return WordReading(greedy, conf, [t for t, _ in alts], [s for _, s in alts])
 
 
 def build_recognizer_from_env() -> Recognizer:

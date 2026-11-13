@@ -164,6 +164,51 @@ class Lexicon:
         return pre + self.surface.get(best, best) + post
 
 
+class TokenTrigram:
+    """Trigram language model over the model's own tokens (a conjunct like '್ರ' is one token), counted from the
+    word list weighted by word frequency. Used inside the CTC beam search to prefer Kannada-like spellings.
+
+    P(c | a, b) = l3 P3 + l2 P2 + l1 P1 + l0 / V   (interpolated; a word starts with the context (BOS, BOS))."""
+
+    BOS, EOS = -1, -2
+    WEIGHTS = (0.6, 0.25, 0.12, 0.03)
+
+    def __init__(self, lexicon: Lexicon) -> None:
+        from collections import Counter
+
+        c3, c2, c1 = Counter(), Counter(), Counter()
+        ctx2, ctx1 = Counter(), Counter()
+        for key, n in lexicon.counts.items():
+            seq = [self.BOS, self.BOS] + (lexicon.tokens(key) or []) + [self.EOS]
+            for a, b, c in zip(seq, seq[1:], seq[2:]):
+                c3[(a, b, c)] += n
+                ctx2[(a, b)] += n
+                c2[(b, c)] += n
+                ctx1[b] += n
+                c1[c] += n
+        self.c3, self.c2, self.c1, self.ctx2, self.ctx1 = c3, c2, c1, ctx2, ctx1
+        self.total = sum(c1.values())
+        self.vocab = len(c1)
+        self._cache: dict[tuple[int, int, int], float] = {}
+
+    def logp(self, a: int, b: int, c: int) -> float:
+        key = (a, b, c)
+        hit = self._cache.get(key)
+        if hit is not None:
+            return hit
+        l3, l2, l1, l0 = self.WEIGHTS
+        p = l0 / self.vocab
+        if self.total:
+            p += l1 * self.c1[c] / self.total
+        if self.ctx1[b]:
+            p += l2 * self.c2[(b, c)] / self.ctx1[b]
+        if self.ctx2[(a, b)]:
+            p += l3 * self.c3[key] / self.ctx2[(a, b)]
+        lp = math.log(p)
+        self._cache[key] = lp
+        return lp
+
+
 def load_lexicon(idx_to_char: dict[int, str]) -> Lexicon | None:
     if not LEXICON_ENABLED or not LEXICON_PATH.exists():
         return None
