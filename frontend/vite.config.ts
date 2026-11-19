@@ -32,8 +32,12 @@ export default defineConfig(({ mode }) => {
       sourcemap: true,
       rollupOptions: {
         output: {
-          manualChunks: {
-            react: ['react', 'react-dom', 'react-router-dom'],
+          // Function form: Vite 8 (Rolldown) no longer accepts the object form.
+          manualChunks(id: string) {
+            if (/[\\/]node_modules[\\/](react|react-dom|react-router|react-router-dom|scheduler)[\\/]/.test(id)) {
+              return 'react';
+            }
+            return undefined;
           },
         },
       },
