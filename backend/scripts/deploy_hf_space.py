@@ -1,5 +1,7 @@
 """Upload the backend to a Hugging Face Space (Docker SDK) and set its runtime variables.
 
+Note: Docker Spaces on cpu-basic need a Hugging Face PRO plan (a free account gets HTTP 402).
+
 One-time login first (stores your token locally, not in this repo):
     python -c "from huggingface_hub import login; login()"
 
