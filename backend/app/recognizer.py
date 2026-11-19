@@ -11,7 +11,6 @@ from __future__ import annotations
 import hashlib
 import math
 import os
-import threading
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -21,6 +20,7 @@ import numpy as np
 import torch
 
 from app import notebook_pipeline as nbp
+from app.compute import MODEL_LOCK, cpu_limit
 from app.lexicon import TokenTrigram, load_lexicon
 
 BACKEND_ROOT = Path(__file__).resolve().parent.parent
@@ -59,7 +59,7 @@ def _load_state_dict(path: Path) -> dict:
 
 class Recognizer:
     def __init__(self, model_path: str, charset_path: str, model_version: str | None = None,
-                 batch_size: int = 64, beam_width: int = 5) -> None:
+                 batch_size: int = 16, beam_width: int = 5) -> None:
         self.model_path = _resolve(model_path)
         self.charset_path = _resolve(charset_path)
         self.batch_size = batch_size
@@ -76,7 +76,8 @@ class Recognizer:
         if n_out != len(chars) + 1:
             raise ValueError(f"model has {n_out} outputs but charset has {len(chars)} chars (+1 blank)")
         # The CNN is ~3.6 GMAC per word, so CPU threads matter (PyTorch defaults to half the cores).
-        torch.set_num_threads(int(os.getenv("TORCH_THREADS", str(os.cpu_count() or 1))))
+        # cpu_limit() respects a container's CPU quota (os.cpu_count() would report the host's cores).
+        torch.set_num_threads(int(os.getenv("TORCH_THREADS", str(cpu_limit()))))
         self.model = nbp.CRNN(n_out)
         self.model.load_state_dict(state, strict=True)
         self.model.eval()
@@ -92,8 +93,9 @@ class Recognizer:
 
         digest = hashlib.sha256(self.model_path.read_bytes()).hexdigest()[:8]
         self.model_version = model_version or f"{self.model_path.stem}-{digest}"
-        # torch modules are not guaranteed thread-safe; requests run in a thread pool.
-        self._lock = threading.Lock()
+        # torch modules are not guaranteed thread-safe; requests run in a thread pool. The lock is shared with
+        # text-to-speech so the two models never run at once (memory; see app/compute.py).
+        self._lock = MODEL_LOCK
 
     # ---------------- preprocessing (notebook read_words, enhance_mode=True) ----------------
     @staticmethod
@@ -243,5 +245,6 @@ def build_recognizer_from_env() -> Recognizer:
         model_path=os.getenv("CRNN_MODEL_PATH", "models/crnn_v8.pth"),
         charset_path=os.getenv("CRNN_CHARSET_PATH", "models/charset_v8.txt"),
         model_version=os.getenv("MODEL_VERSION") or None,
-        batch_size=int(os.getenv("OCR_BATCH_SIZE", "64")),
+        # 16, not 64: same speed on CPU, ~0.4 GB lower peak memory per batch (measured on a 2-page PDF).
+        batch_size=int(os.getenv("OCR_BATCH_SIZE", "16")),
     )

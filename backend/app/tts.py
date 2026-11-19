@@ -14,6 +14,8 @@ import wave
 
 import numpy as np
 
+from app.compute import MODEL_LOCK
+
 TTS_MODEL = os.getenv("TTS_MODEL", "facebook/mms-tts-kan")
 TTS_ENABLED = os.getenv("TTS_ENABLED", "true").lower() not in ("0", "false", "no")
 MAX_TTS_CHARS = int(os.getenv("MAX_TTS_CHARS", "2000"))
@@ -83,7 +85,8 @@ class KannadaTTS:
             inputs = self._tokenizer(chunk, return_tensors="pt")
             if inputs["input_ids"].shape[1] == 0:
                 continue
-            with self._lock, torch.inference_mode():
+            # Shared with OCR (app/compute.py): an overlapping OCR batch and TTS sentence ran a 2 GB container out of memory.
+            with MODEL_LOCK, torch.inference_mode():
                 wav = self._model(**inputs).waveform[0].numpy()
             pieces += [wav, pause]
         audio = np.concatenate(pieces) if pieces else pause

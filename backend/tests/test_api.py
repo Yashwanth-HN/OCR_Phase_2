@@ -339,3 +339,34 @@ def test_lexicon_never_changes_a_common_word_or_non_kannada(lexicon):
     lp = fake_log_probs(lexicon, "ಕನ್ನಡ")
     assert lexicon.correct("ಕನ್ನಡ", lp, ["ಕನ್ನಡದ"]) == "ಕನ್ನಡ"
     assert lexicon.correct("2024", lp, []) == "2024"
+
+
+def test_ocr_waits_while_the_shared_model_lock_is_held(client):
+    """OCR and text-to-speech share one lock (app/compute.py): on a 2 GB container an overlapping OCR batch and
+    TTS sentence ran out of memory and the container was killed."""
+    import threading
+
+    from app.compute import MODEL_LOCK
+
+    rec = main.state["recognizer"]
+    assert rec._lock is MODEL_LOCK
+    crop = np.full((40, 120), 255, np.uint8)
+    done = threading.Event()
+    with MODEL_LOCK:  # e.g. a TTS sentence being synthesised
+        worker = threading.Thread(target=lambda: (rec.probabilities([crop], False), done.set()))
+        worker.start()
+        assert not done.wait(0.5), "OCR ran while another model call held the lock"
+    assert done.wait(30)
+    worker.join()
+
+
+def test_cpu_limit_reads_a_cgroup_quota(tmp_path, monkeypatch):
+    from app import compute
+
+    real_path = compute.Path
+    quota = tmp_path / "cpu.max"
+    quota.write_text("150000 100000\n")
+    monkeypatch.setattr(compute, "Path", lambda p: quota if p == "/sys/fs/cgroup/cpu.max" else real_path(p))
+    assert compute.cpu_limit() == 2  # 1.5 CPUs -> 2 threads
+    quota.write_text("max 100000\n")
+    assert compute.cpu_limit() == (compute.os.cpu_count() or 1)
