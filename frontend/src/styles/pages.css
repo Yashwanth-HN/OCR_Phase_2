@@ -236,9 +236,12 @@
 .pipeline__num {
   display: grid;
   place-items: center;
-  width: 34px;
+  /* A pill, not a 34 px circle: the label is "Step 1" / "ಹಂತ 1", which wrapped inside the circle. */
+  min-width: 34px;
   height: 34px;
-  border-radius: 50%;
+  padding-inline: 12px;
+  white-space: nowrap;
+  border-radius: 999px;
   background: var(--brand-soft);
   color: var(--brand-soft-fg);
   border: 1px solid color-mix(in srgb, var(--brand) 30%, transparent);
@@ -529,6 +532,15 @@
   .batch-row__thumb { width: 44px; height: 44px; }
   .batch-row__actions { grid-column: 1 / -1; justify-content: flex-end; }
   .pipeline__arrow { display: none; }
+  /* Steps as a vertical list instead of a wrapped row. */
+  .pipeline { flex-direction: column; align-items: flex-start; width: fit-content; margin-inline: auto; }
+  /* File name on its own full-width row; mode switch and buttons wrap below it. */
+  .workspace__meta { flex-basis: 100%; }
+  .workspace__mode { margin-left: 0; }
+}
+/* Keyboard shortcuts mean nothing on a touch screen. */
+@media (hover: none) and (pointer: coarse) {
+  .panel--shortcuts { display: none; }
 }
 
 /* ---------- Polish ---------- */

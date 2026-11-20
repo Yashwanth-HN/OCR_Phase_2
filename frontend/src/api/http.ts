@@ -134,7 +134,8 @@ export const httpApi: OcrApi = {
 
   async health() {
     try {
-      const response = await request(ENDPOINTS.health, { method: 'GET' }, undefined, 5_000);
+      // 30 s, not 5 s: a backend that scales to zero needs several seconds to start, and /health waits for it.
+      const response = await request(ENDPOINTS.health, { method: 'GET' }, undefined, 30_000);
       const body = (await response.json().catch(() => ({}))) as Record<string, unknown>;
       const version = body.model_version ?? body.modelVersion;
       return { online: true, modelVersion: typeof version === 'string' ? version : undefined };

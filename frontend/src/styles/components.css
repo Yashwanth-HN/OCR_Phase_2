@@ -177,6 +177,11 @@
 }
 
 .site-footer {
+  /* Two texts side by side (stacked on narrow screens); inline spans ran together ("…recognitionInformation"). */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px 24px;
   border-top: 1px solid var(--border);
   padding-block: 28px;
   color: var(--muted);
@@ -377,8 +382,23 @@
 }
 
 .slider {
+  display: grid;
+  gap: 6px;
   width: 100%;
   accent-color: var(--brand);
+}
+/* Name on the left, value on the right ("Contrast   50"), the range input on its own row below. */
+.slider label {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.slider__value {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.slider input[type='range'] {
+  width: 100%;
 }
 
 .segmented {
