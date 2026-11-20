@@ -5,7 +5,12 @@ FROM python:3.11-slim
 RUN useradd -m -u 1000 user
 WORKDIR /app
 # HF_HOME inside /app: the speech model downloaded at build time is found again at run time.
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 HF_HOME=/app/.hf-cache
+# MALLOC_ARENA_MAX=2: glibc otherwise keeps a memory arena per worker thread, and with PyTorch + a thread pool the
+# freed memory is not returned, so the process grows until a 2 GB container is killed.
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 HF_HOME=/app/.hf-cache MALLOC_ARENA_MAX=2
+# Commit the image was built from; reported by /health (CI passes the git SHA).
+ARG APP_BUILD=dev
+ENV APP_BUILD=$APP_BUILD
 COPY requirements.txt .
 # CPU-only torch wheel (the default index pulls ~2 GB of CUDA libraries).
 RUN pip install --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cpu -r requirements.txt

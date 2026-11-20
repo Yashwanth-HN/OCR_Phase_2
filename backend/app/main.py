@@ -14,6 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, Field
 
+from app.compute import memory_mb
 from app.pdf_export import build_pdf
 from app.pipeline import MODES, TEXT_TYPES, InputError, Options, run_ocr, sniff
 from app.recognizer import Recognizer, build_recognizer_from_env
@@ -25,6 +26,7 @@ from app.tts import MAX_TTS_CHARS, TTS_ENABLED, KannadaTTS, TTSUnavailable
 BACKEND_ROOT = Path(__file__).resolve().parent.parent
 MAX_UPLOAD_MB = float(os.getenv("MAX_UPLOAD_MB", "20"))
 MAX_UPLOAD_BYTES = int(MAX_UPLOAD_MB * 1024 * 1024)
+APP_BUILD = os.getenv("APP_BUILD", "dev")
 FEEDBACK_PATH = Path(os.getenv("FEEDBACK_PATH", str(BACKEND_ROOT / "data" / "feedback.jsonl")))
 
 state: dict[str, object] = {"recognizer": None, "load_error": ""}
@@ -130,7 +132,12 @@ def health() -> JSONResponse:
     rec = state["recognizer"]
     if rec is None:
         return JSONResponse(status_code=503, content={"status": "error", "detail": state["load_error"]})
-    return JSONResponse(content={"status": "ok", "model_version": rec.model_version})  # type: ignore[union-attr]
+    return JSONResponse(content={
+        "status": "ok",
+        "model_version": rec.model_version,  # type: ignore[union-attr]
+        "build": APP_BUILD,                  # commit the image was built from (Docker build arg)
+        "memory_mb": memory_mb(),
+    })
 
 
 @app.post("/ocr")

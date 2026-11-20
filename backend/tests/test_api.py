@@ -56,6 +56,8 @@ def test_health(client):
     r = client.get("/health")
     assert r.status_code == 200
     assert r.json()["status"] == "ok" and r.json()["model_version"]
+    assert r.json()["build"]  # commit of the deployed image ("dev" locally)
+    assert isinstance(r.json()["memory_mb"], dict)  # rss / peak_rss / container on Linux, empty elsewhere
 
 
 def test_word_mode(client):
@@ -370,3 +372,15 @@ def test_cpu_limit_reads_a_cgroup_quota(tmp_path, monkeypatch):
     assert compute.cpu_limit() == 2  # 1.5 CPUs -> 2 threads
     quota.write_text("max 100000\n")
     assert compute.cpu_limit() == (compute.os.cpu_count() or 1)
+
+
+def test_long_tts_sentences_are_split_at_spaces():
+    """TTS memory grows with input length; a 220-character sentence ran the 2 GB deployment out of memory."""
+    from app.tts import split_at_spaces
+
+    sentence = " ".join(["ಕನ್ನಡ", "ನಾಡು", "ನುಡಿ", "ಸಂಸ್ಕೃತಿ", "ಬಹಳ", "ಸುಂದರವಾಗಿದೆ"] * 6)
+    pieces = split_at_spaces(sentence, 100)
+    assert len(pieces) > 1 and all(len(p) <= 100 for p in pieces)
+    assert " ".join(pieces) == sentence  # nothing lost or reordered
+    assert split_at_spaces("ಚಿಕ್ಕ ವಾಕ್ಯ", 100) == ["ಚಿಕ್ಕ ವಾಕ್ಯ"]
+    assert split_at_spaces("x" * 150, 100) == ["x" * 150]  # one long word stays whole

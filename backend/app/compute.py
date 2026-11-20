@@ -15,6 +15,28 @@ from pathlib import Path
 MODEL_LOCK = threading.Lock()
 
 
+def memory_mb() -> dict[str, int]:
+    """Memory of this process and its container in MB (Linux only; empty elsewhere), reported by /health so a
+    deployment can be checked from outside: rss = now, peak_rss = highest so far, container = cgroup total."""
+    out: dict[str, int] = {}
+    try:
+        for line in Path("/proc/self/status").read_text().splitlines():
+            if line.startswith("VmRSS:"):
+                out["rss"] = int(line.split()[1]) // 1024
+            elif line.startswith("VmHWM:"):
+                out["peak_rss"] = int(line.split()[1]) // 1024
+    except (OSError, ValueError, IndexError):
+        pass
+    try:
+        out["container"] = int(Path("/sys/fs/cgroup/memory.current").read_text()) // 2**20
+        limit = Path("/sys/fs/cgroup/memory.max").read_text().strip()
+        if limit != "max":
+            out["container_limit"] = int(limit) // 2**20
+    except (OSError, ValueError):
+        pass
+    return out
+
+
 def cpu_limit() -> int:
     """CPUs this process may use: the container's CPU quota (cgroup v2 cpu.max, or v1 cfs quota) when one is set,
     else all cores. os.cpu_count() reports the host's cores, so in a 1-vCPU container it would make PyTorch start
